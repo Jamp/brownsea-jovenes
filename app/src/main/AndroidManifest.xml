@@ -18,7 +18,10 @@
         <activity
             android:name="us.icter.activitys.ImageActivity"
             android:label="@string/title_activity_image"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="us.icter.activitys.AnswerActivity" />
     </application>
 
 </manifest>

@@ -1,40 +1,39 @@
 package us.icter.activitys;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.View.OnClickListener;
+
+import com.ortiz.touch.TouchImageView;
 
 import us.icter.brownsea.R;
 
 public class ImageActivity extends AppCompatActivity {
+    private TouchImageView image;
+    //private DecimalFormat df;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
 
-        ImageView img1 = (ImageView) findViewById(R.id.imageView1);
-        ImageView img2 = (ImageView) findViewById(R.id.imageView2);
-        ImageView img3 = (ImageView) findViewById(R.id.imageView3);
+        int idImage = getIntent().getIntExtra("Image", R.drawable.infografia_ebola);
+        image = (TouchImageView) findViewById(R.id.img);
+        image.setImageDrawable(getResources().getDrawable(idImage));
 
-        if (img1 != null) {
-            img1.setImageDrawable(getResources().getDrawable(R.drawable.infografia_ebola));
-        }
-        if (img2 != null) {
-            img2.setImageDrawable(getResources().getDrawable(R.drawable.infografia_ebola));
-        }
-        if (img3 != null) {
-            img3.setImageDrawable(getResources().getDrawable(R.drawable.infografia_ebola));
-        }
-
-        /*fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+        FloatingActionButton btnAnswer = (FloatingActionButton) findViewById(R.id.btnAnswer);
+        btnAnswer.setOnClickListener(new AnswerListener());
     }
 
+    private class AnswerListener implements OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(ImageActivity.this, AnswerActivity.class);
+            startActivity(intent);
+        }
+    }
 }

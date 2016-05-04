@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Brownsea</string>
     <string name="title_activity_image">ImageActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="message_answer">¿Cual es la respuesta?</string>
+    <string name="send_answer">Enviar</string>
 </resources>

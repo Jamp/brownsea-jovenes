@@ -1,17 +1,17 @@
 package us.icter.activitys;
 
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 
 import us.icter.brownsea.R;
 
-/**
- * Created by jamp on 1/5/16.
- */
-public class qr extends AppCompatActivity {
+public class AnswerActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_answer);
+
+
     }
 }
