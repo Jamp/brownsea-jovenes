@@ -10,22 +10,22 @@ import us.icter.brownsea.R;
  */
 public class Pruebas extends ArrayList<Estacion> {
 
-    public void Pruebas(Context context) {
+    public Pruebas() {
         Estacion estacion;
 
-        estacion = new Estacion("123", "Ebola", 1, context.getResources().getDrawable(R.drawable.infografia_ebola));
-        this.add(estacion);
+        estacion = new Estacion("123", "Ebola", 1, R.drawable.infografia_ebola);
+        add(estacion);
 
-        estacion = new Estacion("133", "Ebola", 2, context.getResources().getDrawable(R.drawable.infografia_ebola));
-        this.add(estacion);
+        estacion = new Estacion("133", "Ebola", 2, R.drawable.infografia_ebola);
+        add(estacion);
 
-        estacion = new Estacion("134", "Ebola", 3, context.getResources().getDrawable(R.drawable.infografia_ebola));
-        this.add(estacion);
+        estacion = new Estacion("134", "Ebola", 3, R.drawable.infografia_ebola, 5);
+        add(estacion);
     }
 
     public Estacion getEstacion(String code) {
         for (Estacion e : this) {
-            if (e.getCode() == code) {
+            if (e.getCode().equals(code)) {
                 return e;
             }
         }

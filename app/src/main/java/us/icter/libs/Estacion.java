@@ -10,17 +10,17 @@ public class Estacion {
     private String name; // Nombre de la Estación
     private int type; // Tipo de estación (Texto, Vídeo, foto)
     private int extras; // Duración del video
-    private Drawable task; // Imagen de la tarea
+    private int task; // Imagen de la tarea
     private boolean status; // Estado del estación
 
-    public Estacion(String code, String name, int type, Drawable task) {
+    public Estacion(String code, String name, int type, int task) {
         this.code = code;
         this.type = type;
         this.task = task;
         this.status = false;
     }
 
-    public Estacion(String code, String name, int type, Drawable task, int extras) {
+    public Estacion(String code, String name, int type, int task, int extras) {
         this.code = code;
         this.type = type;
         this.task = task;
@@ -48,7 +48,7 @@ public class Estacion {
         return extras;
     }
 
-    public Drawable getTask() {
+    public int getTask() {
         return task;
     }
 }
