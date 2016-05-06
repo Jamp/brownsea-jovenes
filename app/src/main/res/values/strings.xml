@@ -1,7 +1,10 @@
 <resources>
-    <string name="app_name">Conquistadores de Bronwsea</string>
+    <string name="app_name">Bronwsea</string>
+    <string name="title_activity_main">Bronwsea</string>
+    <string name="title_activity_image"></string>
     <string name="message_answer">¿Cual es la respuesta?</string>
     <string name="send_answer">Enviar</string>
     <string name="msg_no_scan">Error al leer el código</string>
     <string name="msg_no_code">Código Inválido</string>
+    <string name="loading_upload">Por favor espere, Subiendo...</string>
 </resources>
