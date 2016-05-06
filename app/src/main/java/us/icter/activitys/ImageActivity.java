@@ -29,9 +29,11 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
         setContentView(R.layout.activity_image);
 
         String code = getIntent().getStringExtra("Code");
+        MainActivity mainActivity = (MainActivity) getParent();
+        Pruebas pruebas = mainActivity.getPruebas();
 
-        Pruebas pruebas = new Pruebas();
         prueba = pruebas.getEstacion(code);
+        mainActivity.addPrueba(prueba);
 
         image = (TouchImageView) findViewById(R.id.img);
         image.setImageDrawable(getResources().getDrawable(prueba.getTask()));

@@ -1,7 +1,5 @@
 package us.icter.libs;
 
-import android.graphics.drawable.Drawable;
-
 /**
  * Created by jamp on 30/4/16.
  */
@@ -15,6 +13,7 @@ public class Estacion {
 
     public Estacion(String code, String name, int type, int task) {
         this.code = code;
+        this.name = name;
         this.type = type;
         this.task = task;
         this.status = false;
@@ -22,6 +21,7 @@ public class Estacion {
 
     public Estacion(String code, String name, int type, int task, int extras) {
         this.code = code;
+        this.name = name;
         this.type = type;
         this.task = task;
         this.extras = extras;
@@ -50,5 +50,9 @@ public class Estacion {
 
     public int getTask() {
         return task;
+    }
+
+    public boolean getStatus() {
+        return this.status;
     }
 }

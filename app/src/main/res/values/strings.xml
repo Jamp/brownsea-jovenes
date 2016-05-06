@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">Brownsea</string>
-    <string name="title_activity_image">ImageActivity</string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="app_name">Conquistadores de Bronwsea</string>
     <string name="message_answer">¿Cual es la respuesta?</string>
     <string name="send_answer">Enviar</string>
     <string name="msg_no_scan">Error al leer el código</string>
+    <string name="msg_no_code">Código Inválido</string>
 </resources>

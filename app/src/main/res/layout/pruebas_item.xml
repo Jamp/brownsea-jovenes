@@ -4,7 +4,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:layout_width="120dp"
+        android:layout_width="80dp"
         android:layout_height="80dp"
         android:id="@+id/imageItem"
         android:src="@drawable/ic_done_black_24dp"
@@ -23,13 +23,15 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Large Text"
-            android:id="@+id/titleItem" />
+            android:id="@+id/titleItem"
+            android:textColor="@android:color/black" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium Text"
-            android:id="@+id/subtitleItem" />
+            android:id="@+id/subtitleItem"
+            android:textColor="@android:color/tertiary_text_light" />
     </LinearLayout>
 </LinearLayout>
