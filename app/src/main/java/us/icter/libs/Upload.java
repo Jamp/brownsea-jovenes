@@ -1,16 +1,20 @@
 package us.icter.libs;
 
-import android.os.Environment;
 import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * Created by jamp on 6/5/16.
@@ -20,93 +24,98 @@ public class Upload {
     DataOutputStream dos = null;
     DataInputStream inStream = null;
     String urlString = "http://192.168.100.16:3000/api/";
-    String existingFileName = null;
+    String fileName = null;
+    boolean resultado = true;
 
-    public Upload(int type, String file){
-        existingFileName = file;
+    public Upload(String codigo, String patrulla, int type, String file){
+        fileName = file;
         if (type == 2)
             urlString += "photo/";
         else
             urlString += "video/";
+
+        try {
+            urlString += "?codigo=" + URLEncoder.encode(codigo, "UTF-8");
+            urlString += "&patrulla=" + URLEncoder.encode(patrulla, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void doFileUpload() {
+    public boolean doFileUpload() {
         String lineEnd = "\r\n";
         String twoHyphens = "--";
         String boundary = "*****";
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
         int maxBufferSize = 1 * 1024 * 1024;
-        String responseFromServer = "";
 
         try {
-            //------------------ CLIENT REQUEST
-            FileInputStream fileInputStream = new FileInputStream(new File(existingFileName));
-            // open a URL connection to the Servlet
+            FileInputStream fileInputStream = new FileInputStream(new File(fileName));
             URL url = new URL(urlString);
-            // Open a HTTP connection to the URL
             conn = (HttpURLConnection) url.openConnection();
-            // Allow Inputs
             conn.setDoInput(true);
-            // Allow Outputs
             conn.setDoOutput(true);
-            // Don't use a cached copy.
             conn.setUseCaches(false);
-            // Use a post method.
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
             dos = new DataOutputStream(conn.getOutputStream());
             dos.writeBytes(twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\"" + existingFileName + "\"" + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\"" + fileName + "\"" + lineEnd);
             dos.writeBytes(lineEnd);
-            // create a buffer of maximum size
             bytesAvailable = fileInputStream.available();
             bufferSize = Math.min(bytesAvailable, maxBufferSize);
             buffer = new byte[bufferSize];
-            // read file and write it into form...
             bytesRead = fileInputStream.read(buffer, 0, bufferSize);
 
             while (bytesRead > 0) {
-
                 dos.write(buffer, 0, bufferSize);
                 bytesAvailable = fileInputStream.available();
                 bufferSize = Math.min(bytesAvailable, maxBufferSize);
                 bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-
             }
 
-            // send multipart form data necesssary after file data...
             dos.writeBytes(lineEnd);
             dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-            // close streams
-            Log.e("Debug", "File is written");
+            Log.d("Debug", "File is written");
             fileInputStream.close();
             dos.flush();
             dos.close();
 
         } catch (MalformedURLException ex) {
             Log.e("Debug", "error: " + ex.getMessage(), ex);
+            resultado = false;
         } catch (IOException ioe) {
             Log.e("Debug", "error: " + ioe.getMessage(), ioe);
+            resultado = false;
         }
 
-        //------------------ read the SERVER RESPONSE
         try {
 
             inStream = new DataInputStream(conn.getInputStream());
             String str;
 
             while ((str = inStream.readLine()) != null) {
-
-                Log.e("Debug", "Server Response " + str);
-
+                JSONObject obj = new JSONObject(str);
+                if (obj.getInt("status") != 1) {
+                    resultado = false;
+                }
+                Log.d("Debug", "Server Response " + obj.getString("msg"));
             }
-
             inStream.close();
 
         } catch (IOException ioex) {
             Log.e("Debug", "error: " + ioex.getMessage(), ioex);
+            resultado = false;
+        } catch (JSONException jsex) {
+            jsex.printStackTrace();
+            resultado = false;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            resultado = false;
         }
+
+        return resultado;
     }
 }

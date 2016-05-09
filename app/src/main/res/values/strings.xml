@@ -2,9 +2,11 @@
     <string name="app_name">Bronwsea</string>
     <string name="title_activity_main">Bronwsea</string>
     <string name="title_activity_image"></string>
-    <string name="message_answer">¿Cual es la respuesta?</string>
+    <string name="message_answer">¿Cuál es la respuesta?</string>
     <string name="send_answer">Enviar</string>
     <string name="msg_no_scan">Error al leer el código</string>
     <string name="msg_no_code">Código Inválido</string>
     <string name="loading_upload">Por favor espere, Subiendo...</string>
+    <string name="msg_patrol">¿Cuál es el nombre de tu patrulla?</string>
+    <string name="save_patrol">Guardar</string>
 </resources>

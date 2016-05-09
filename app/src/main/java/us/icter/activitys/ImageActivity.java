@@ -1,7 +1,10 @@
 package us.icter.activitys;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -9,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +37,7 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
     private Pruebas pruebas = new Pruebas();
     private TouchImageView image;
     private String fileURI;
+    private String code;
     Estacion prueba;
 
     @Override
@@ -40,7 +45,7 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
 
-        String code = getIntent().getStringExtra("Code");
+        code = getIntent().getStringExtra("Code");
 
         prueba = pruebas.getEstacion(code);
         //mainActivity.addPrueba(prueba);
@@ -58,36 +63,26 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
     }
 
     private void takeVideo() {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
-        //folder stuff
-        File imagesFolder = new File(Environment.getExternalStorageDirectory() + "/DCIM/", "Bronwsea");
-        imagesFolder.mkdirs();
-
-        File image = new File(imagesFolder, "Patrulla_" + timeStamp + ".3gp");
-        Uri uriSavedVideo = Uri.fromFile(image);
-
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
             takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, prueba.getExtras());
             takeVideoIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, "Landscape");
             takeVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
-            //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedVideo);
             startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
         }
     }
 
     private void takePhoto() {
-        //camera stuff
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
         //folder stuff
-        File imagesFolder = new File(Environment.getExternalStorageDirectory() + "/DCIM/", "Bronwsea");
+        File imagesFolder = new File(Environment.getExternalStorageDirectory() + "/DCIM/", getResources().getString(R.string.app_name));
         imagesFolder.mkdirs();
 
         File image = new File(imagesFolder, "Patrulla_" + timeStamp + ".jpg");
+        // File image = new File(newFileName() + ".jpg");
         Uri uriSavedImage = Uri.fromFile(image);
+        fileURI = image.toString();
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -95,6 +90,7 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
+
 
     @Override
     public void onClick(View view) {
@@ -118,12 +114,12 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
         if (requestCode == REQUEST_VIDEO_CAPTURE) {
             if (resultCode == RESULT_OK) {
                 //Toast.makeText(this, "Video saved to:\n" + data.getData(), Toast.LENGTH_LONG).show();
-                Log.i("VIDEO", data.getData().toString());
+                Log.i("VIDEO", getRealPathFromURI(data.getData()));
 
 
                 SendData upload = new SendData();
                 upload.activity = ImageActivity.this;
-                upload.type = 2;
+                upload.type = 3;
                 upload.URI = getRealPathFromURI(data.getData());
                 upload.execute();
 
@@ -151,6 +147,18 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
         }
     }
 
+    private String newFileName() {
+        //camera stuff
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+        //folder stuff
+        File imagesFolder = new File(Environment.getExternalStorageDirectory() + "/DCIM/", getResources().getString(R.string.app_name));
+        imagesFolder.mkdirs();
+
+        // File image = new File(imagesFolder.toString() + "Patrulla_" + timeStamp + ".jpg");
+        return imagesFolder.toString() + "/Patrulla_" + timeStamp;
+    }
+
     public String getRealPathFromURI(Uri contentUri) {
         String[] proj = { MediaStore.Images.Media.DATA };
         Cursor cursor = managedQuery(contentUri, proj, null, null, null);
@@ -159,7 +167,7 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
         return cursor.getString(column_index);
     }
 
-    private class SendData extends AsyncTask<Void, Void, String> {
+    private class SendData extends AsyncTask<Void, Void, Boolean> {
         private ProgressDialog pDialog;
         private ImageActivity activity;
         public int type;
@@ -177,21 +185,39 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
         }
 
         @Override
-        protected String doInBackground(Void... voids) {
-            try {
-                Upload upload = new Upload(type, URI);
-                upload.doFileUpload();
-            } catch (Exception e) {
-                Log.e("COMUNICACION", e.getMessage());
-            }
-            return null;
+        protected Boolean doInBackground(Void... voids) {
+            boolean resultado = false;
+            // try {
+                SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.PFTAG, Context.MODE_PRIVATE);
+                String patrulla = sharedPreferences.getString(MainActivity.PFDATA, null);
+                if (patrulla != null) {
+                    Upload upload = new Upload(code, patrulla, type, URI);
+                    resultado = upload.doFileUpload();
+                } else {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ImageActivity.this);
+                    AlertDialog alertDialog = alertDialogBuilder
+                            .setTitle("Sin Configuración")
+                            .setMessage("Por favor, cierre y vuelva a iniciar la aplicación")
+                            .create();
+                    alertDialog.show();
+                }
+            // } catch (Exception e) {
+            //     Log.e("COMUNICACION", e.getMessage());
+            // }
+            return resultado;
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(Boolean b) {
+            super.onPostExecute(b);
             pDialog.dismiss();
-            Toast.makeText(activity, "Subida Exitosa", Toast.LENGTH_LONG).show();
+            if (b) {
+                Toast.makeText(activity, "Subida de datos exitosa", Toast.LENGTH_LONG).show();
+                // Competencia lista = Competencia.getInstancia(getSharedPreferences(MainActivity.PFTAG, Context.MODE_PRIVATE));
+                // lista.add(code);
+                finish();
+            } else
+                Toast.makeText(activity, "Error durante la subida de datos", Toast.LENGTH_LONG).show();
         }
     }
 
