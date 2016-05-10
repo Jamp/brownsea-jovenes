@@ -1,6 +1,5 @@
 package us.icter.activitys;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -106,6 +105,7 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
     @Override
     public void onClick(View view) {
         if (prueba != null) {
+
             switch (prueba.getType()) {
                 case 1:
                     responseTask();
@@ -146,7 +146,7 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
 
                 SendData upload = new SendData();
                 upload.activity = ImageActivity.this;
-                upload.type = 3;
+                upload.type = 2;
                 upload.URI = fileURI;
                 upload.execute();
 
@@ -190,7 +190,8 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
             super.onPreExecute();
             pDialog = new ProgressDialog(activity);
             pDialog.setMessage(getResources().getString(R.string.loading_upload));
-            pDialog.setIndeterminate(false);
+            pDialog.setIndeterminate(true);
+            pDialog.setCancelable(false);
 
             pDialog.show();
         }
@@ -224,8 +225,6 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
             pDialog.dismiss();
             if (b) {
                 Toast.makeText(activity, "Subida de datos exitosa", Toast.LENGTH_LONG).show();
-                // Competencia lista = Competencia.getInstancia(getSharedPreferences(MainActivity.PFTAG, Context.MODE_PRIVATE));
-                // lista.add(code);
                 finish();
             } else
                 Toast.makeText(activity, "Error durante la subida de datos", Toast.LENGTH_LONG).show();

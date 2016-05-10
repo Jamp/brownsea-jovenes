@@ -9,4 +9,5 @@
     <string name="loading_upload">Por favor espere, Subiendo...</string>
     <string name="msg_patrol">¿Cuál es el nombre de tu patrulla?</string>
     <string name="save_patrol">Guardar</string>
+    <string name="loading_data">Cargando Datos</string>
 </resources>

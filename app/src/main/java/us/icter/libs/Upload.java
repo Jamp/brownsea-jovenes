@@ -23,12 +23,16 @@ public class Upload {
     HttpURLConnection conn = null;
     DataOutputStream dos = null;
     DataInputStream inStream = null;
-    String urlString = "http://192.168.100.16:3000/api/";
+    //String urlString = "http://192.168.100.16:3000/api/";
+    String urlString = "https://bronwsea-test.herokuapp.com/api/";
     String fileName = null;
     boolean resultado = true;
 
     public Upload(String codigo, String patrulla, int type, String file){
         fileName = file;
+        Log.d("TYPE", String.valueOf(type));
+        Log.d("TYPE", String.valueOf(type == 2));
+
         if (type == 2)
             urlString += "photo/";
         else
@@ -40,6 +44,8 @@ public class Upload {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
+        Log.d("URL", urlString);
     }
 
     public boolean doFileUpload() {
@@ -95,7 +101,7 @@ public class Upload {
 
             inStream = new DataInputStream(conn.getInputStream());
             String str;
-
+            Log.d("RECEIVE", inStream.readLine());
             while ((str = inStream.readLine()) != null) {
                 JSONObject obj = new JSONObject(str);
                 if (obj.getInt("status") != 1) {

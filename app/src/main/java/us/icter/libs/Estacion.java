@@ -32,6 +32,10 @@ public class Estacion {
         this.status = true;
     }
 
+    public void unapproved() {
+        this.status = false;
+    }
+
     public String getCode() {
         return code;
     }

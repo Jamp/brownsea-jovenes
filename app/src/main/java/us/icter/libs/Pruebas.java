@@ -16,10 +16,10 @@ public class Pruebas extends ArrayList<Estacion> {
         estacion = new Estacion("123", "Ebola", 1, R.drawable.infografia_ebola);
         add(estacion);
 
-        estacion = new Estacion("133", "Ebola", 2, R.drawable.infografia_ebola);
+        estacion = new Estacion("133", "Redes Sociales", 2, R.drawable.infografia_adictos_a_las_redes);
         add(estacion);
 
-        estacion = new Estacion("134", "Ebola", 3, R.drawable.infografia_ebola, 5);
+        estacion = new Estacion("134", "Prevención de Ebola", 3, R.drawable.infografia_ebola, 5);
         add(estacion);
     }
 
