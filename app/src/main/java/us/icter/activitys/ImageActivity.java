@@ -53,8 +53,19 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
         image = (TouchImageView) findViewById(R.id.img);
         image.setImageDrawable(getResources().getDrawable(prueba.getTask()));
 
-        FloatingActionButton btnAnswer = (FloatingActionButton) findViewById(R.id.btnAnswer);
-        btnAnswer.setOnClickListener(this);
+        FloatingActionButton btnPhoto = (FloatingActionButton) findViewById(R.id.btnPhoto);
+        btnPhoto.setOnClickListener(this);
+
+        FloatingActionButton btnVideo = (FloatingActionButton) findViewById(R.id.btnVideo);
+        btnVideo.setOnClickListener(this);
+
+        if (prueba.getType() == 2) {
+            btnPhoto.setVisibility(View.VISIBLE);
+            btnVideo.setVisibility(View.INVISIBLE);
+        } else {
+            btnPhoto.setVisibility(View.INVISIBLE);
+            btnVideo.setVisibility(View.VISIBLE);
+        }
     }
 
     private void responseTask() {
