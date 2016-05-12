@@ -13,13 +13,13 @@ public class Pruebas extends ArrayList<Estacion> {
     public Pruebas() {
         Estacion estacion;
 
-        estacion = new Estacion("123", "Ebola", 1, R.drawable.infografia_ebola);
+        estacion = new Estacion("123", "Ebola", 1, 1, R.drawable.infografia_ebola);
         add(estacion);
 
-        estacion = new Estacion("133", "Redes Sociales", 2, R.drawable.infografia_adictos_a_las_redes);
+        estacion = new Estacion("133", "Redes Sociales", 1, 2, R.drawable.infografia_adictos_a_las_redes);
         add(estacion);
 
-        estacion = new Estacion("134", "Prevención de Ebola", 3, R.drawable.infografia_ebola, 5);
+        estacion = new Estacion("134", "Prevención de Ebola", 1, 3, R.drawable.infografia_ebola, 5);
         add(estacion);
     }
 

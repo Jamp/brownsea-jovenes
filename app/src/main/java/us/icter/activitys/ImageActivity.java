@@ -38,6 +38,7 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
     private String fileURI;
     private String code;
     Estacion prueba;
+    String patrulla;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,9 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
 
         prueba = pruebas.getEstacion(code);
         //mainActivity.addPrueba(prueba);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.PFTAG, Context.MODE_PRIVATE);
+        patrulla = sharedPreferences.getString(MainActivity.PFDATA, null);
 
         image = (TouchImageView) findViewById(R.id.img);
         image.setImageDrawable(getResources().getDrawable(prueba.getTask()));
@@ -130,6 +134,8 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
 
                 SendData upload = new SendData();
                 upload.activity = ImageActivity.this;
+                upload.patrulla = patrulla;
+                upload.punto = prueba.getPunto();
                 upload.type = 3;
                 upload.URI = getRealPathFromURI(data.getData());
                 upload.execute();
@@ -146,6 +152,8 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
 
                 SendData upload = new SendData();
                 upload.activity = ImageActivity.this;
+                upload.patrulla = patrulla;
+                upload.punto = prueba.getPunto();
                 upload.type = 2;
                 upload.URI = fileURI;
                 upload.execute();
@@ -183,6 +191,7 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
         private ImageActivity activity;
         public int type;
         public String patrulla;
+        public int punto;
         public String URI;
 
         @Override
@@ -200,10 +209,8 @@ public class ImageActivity extends AppCompatActivity implements OnClickListener 
         protected Boolean doInBackground(Void... voids) {
             boolean resultado = false;
             // try {
-                SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.PFTAG, Context.MODE_PRIVATE);
-                String patrulla = sharedPreferences.getString(MainActivity.PFDATA, null);
-                if (patrulla != null) {
-                    Upload upload = new Upload(code, patrulla, type, URI);
+            if (patrulla != null) {
+                    Upload upload = new Upload(code, patrulla, punto, type, URI);
                     resultado = upload.doFileUpload();
                 } else {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ImageActivity.this);

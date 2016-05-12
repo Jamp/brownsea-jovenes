@@ -24,6 +24,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import us.icter.activitys.ConfigActivity;
 import us.icter.activitys.ImageActivity;
@@ -101,21 +102,18 @@ public class MainActivity extends AppCompatActivity {
                     total += 1;
                     String codigo = (String) d.child("codigo").getValue();
                     Long estado = (Long) d.child("estado").getValue();
-                    Estacion e = pruebas.getEstacion(codigo);
 
-                    if (estado != null) {
-                        if (estado.intValue() == 1) {
-                            e.approved();
-                            aprobadas += 1;
-                        } else {
-                           e.unapproved();
-                        }
-                    }
+                    Estacion p = pruebas.getEstacion(codigo);
+                    Estacion e = new Estacion(codigo, p.getName(), p.getPunto(), p.getType(), p.getTask(), p.getExtras());
+                    p = null;
+
+                    if (estado == 1L) {
+                        e.approved();
+                        aprobadas += 1;
+                    } else
+                       e.unapproved();
                     listaPruebas.add(e);
                 }
-
-                Log.d("TOTAL", String.valueOf(total));
-                Log.d("APROBADAS", String.valueOf(aprobadas));
 
                 if (total == aprobadas)
                     activo = true;

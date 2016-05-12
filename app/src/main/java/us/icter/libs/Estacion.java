@@ -6,22 +6,25 @@ package us.icter.libs;
 public class Estacion {
     private String code; // Código del QR
     private String name; // Nombre de la Estación
+    private int punto; // Punto de Control
     private int type; // Tipo de estación (Texto, Vídeo, foto)
     private int extras; // Duración del video
     private int task; // Imagen de la tarea
     private boolean status; // Estado del estación
 
-    public Estacion(String code, String name, int type, int task) {
+    public Estacion(String code, String name, int punto, int type, int task) {
         this.code = code;
         this.name = name;
+        this.punto = punto;
         this.type = type;
         this.task = task;
         this.status = false;
     }
 
-    public Estacion(String code, String name, int type, int task, int extras) {
+    public Estacion(String code, String name, int punto, int type, int task, int extras) {
         this.code = code;
         this.name = name;
+        this.punto = punto;
         this.type = type;
         this.task = task;
         this.extras = extras;
@@ -42,6 +45,10 @@ public class Estacion {
 
     public String getName() {
         return name;
+    }
+
+    public int getPunto() {
+        return punto;
     }
 
     public int getType() {

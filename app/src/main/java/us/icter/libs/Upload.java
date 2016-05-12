@@ -28,10 +28,8 @@ public class Upload {
     String fileName = null;
     boolean resultado = true;
 
-    public Upload(String codigo, String patrulla, int type, String file){
+    public Upload(String codigo, String patrulla, int punto, int type, String file){
         fileName = file;
-        Log.d("TYPE", String.valueOf(type));
-        Log.d("TYPE", String.valueOf(type == 2));
 
         if (type == 2)
             urlString += "photo/";
@@ -41,6 +39,7 @@ public class Upload {
         try {
             urlString += "?codigo=" + URLEncoder.encode(codigo, "UTF-8");
             urlString += "&patrulla=" + URLEncoder.encode(patrulla, "UTF-8");
+            urlString += "&punto=" + String.valueOf(punto);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
